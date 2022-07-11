@@ -7,10 +7,10 @@ import { addLSFavorite, isCityFavorite, removeLSFavorite } from "../utils/local-
 import CityCard from "./CityCard";
 
 import './ChosenCityBox.scss';
-import { getLocations } from "../store/data/thunks";
 
 const ChosenCityBox = () => {
     const dispatch = useAppDispatch();
+    const photos = useAppSelector(state => state.data.searchPhotos);
     const [isFavorite, setIsFavorite] = useState(isCityFavorite('tel aviv'));
     console.log('isFavorite: ', isFavorite);
 
@@ -22,11 +22,9 @@ const ChosenCityBox = () => {
         })
     };
 
-    const photos = useAppSelector(state => state.data.searchPhotos);
 
     useEffect(() => {
         dispatch(fetchCityPhotos('tel aviv'));
-        getLocations();
     }, [])
 
     return (

@@ -1,23 +1,33 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '..';
-import { fetchPhotos } from './thunks';
+import { fetchPhotos, getCitiesForAutoComplete } from './thunks';
 
 export interface DataState {
     value: number;
     status: 'idle' | 'loading' | 'failed';
     searchPhotos: { id: number, largeImageURL: string }[];
+    citiesPool: { id: number, name: string, country: string }[];
 }
 
 const initialState: DataState = {
     value: 0,
     status: 'idle',
-    searchPhotos: []
+    searchPhotos: [],
+    citiesPool: []
 };
 
 export const fetchCityPhotos = createAsyncThunk(
     'data/fetchCityPhotos',
     async (city: string) => {
         const response = await fetchPhotos(city);
+        return response;
+    }
+);
+
+export const getCitiesAutoComplete = createAsyncThunk(
+    'data/getCitiesAutoComplete',
+    async (city: string) => {
+        const response = await getCitiesForAutoComplete(city);
         return response;
     }
 );
@@ -35,6 +45,9 @@ export const dataSlice = createSlice({
         incrementByAmount: (state, action: PayloadAction<number>) => {
             state.value += action.payload;
         },
+        clearCitiesPool: (state) => {
+            state.citiesPool = [];
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -44,21 +57,19 @@ export const dataSlice = createSlice({
                 state.searchPhotos = action.payload;
             })
             .addCase(fetchCityPhotos.rejected, (state) => {
-            });
+            })
+            .addCase(getCitiesAutoComplete.pending, (state) => {
+            })
+            .addCase(getCitiesAutoComplete.fulfilled, (state, action) => {
+                state.citiesPool = action.payload;
+            })
+            .addCase(getCitiesAutoComplete.rejected, (state) => {
+            })
     },
 });
 
-export const { increment, decrement, incrementByAmount } = dataSlice.actions;
+export const { clearCitiesPool } = dataSlice.actions;
 
 export const selectCount = (state: RootState) => state.data.value;
-
-export const incrementIfOdd =
-    (amount: number): AppThunk =>
-        (dispatch, getState) => {
-            const currentValue = selectCount(getState());
-            if (currentValue % 2 === 1) {
-                dispatch(incrementByAmount(amount));
-            }
-        };
 
 export default dataSlice.reducer;

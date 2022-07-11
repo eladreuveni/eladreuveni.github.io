@@ -1,8 +1,12 @@
 import { Autocomplete, TextField } from '@mui/material';
+import { clearCitiesPool, getCitiesAutoComplete } from '../store/data/dataSlice';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
-import cities from 'cities.json';
+import cities from 'cities-list'
+const citiesPool = Object.keys(cities);
 
 const CityAutoComplete = () => {
+    const dispatch = useAppDispatch();
     return (
         <>
             <Autocomplete
@@ -10,13 +14,19 @@ const CityAutoComplete = () => {
                 dir='rtl'
                 value={null}
                 disablePortal
-                options={cities as { name: string }[]}
-                getOptionLabel={c => c.name}
+                options={citiesPool}
+                getOptionLabel={c => c}
                 renderInput={(params) => {
-                    console.log('params: ', params);
                     return <TextField {...params} label="Please enter city" />
                 }}
-                onChange={(_e, v) => { }}
+                onInputChange={(_e, v) => {
+                    if (v.length >= 3) {
+                        dispatch(getCitiesAutoComplete(v));
+                    }
+                    else {
+                        dispatch(clearCitiesPool());
+                    }
+                }}
             />
         </>
     )

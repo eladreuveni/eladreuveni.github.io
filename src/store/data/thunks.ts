@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export const fetchPhotos = async (city: string) => {
     const API_KEY = '28531388-3a83e7851836cf7a6b68f656f';
@@ -7,21 +7,18 @@ export const fetchPhotos = async (city: string) => {
     return res.data.hits;
 }
 
-export const getLocations = async () => {
+export const getCitiesForAutoComplete = async (search: string) => {
 
     const options = {
         method: 'GET',
         url: 'https://weatherapi-com.p.rapidapi.com/search.json',
-        params: { q: 'Paris' },
+        params: { q: search },
         headers: {
             'X-RapidAPI-Key': 'f48e2746b2msh8c662e7d8cf7b14p1c8442jsnca444c633ed0',
             'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
         }
     };
 
-    axios.request(options).then(function (response) {
-        console.log(response.data);
-    }).catch(function (error) {
-        console.error(error);
-    });
+    const res: AxiosResponse<{ id: number, name: string, country: string }[]> = await axios.request(options);
+    return res.data;
 }
