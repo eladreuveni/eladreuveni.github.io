@@ -1,21 +1,23 @@
 import { Autocomplete, TextField } from '@mui/material';
-import { clearCitiesPool, getCitiesAutoComplete } from '../store/data/dataSlice';
+import { chooseCity, clearCitiesPool, getCitiesAutoComplete } from '../store/data/dataSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { BasicCityData } from '../types';
 
-import cities from 'cities-list'
-const citiesPool = Object.keys(cities);
+import './CityAutoComplete.scss';
 
 const CityAutoComplete = () => {
     const dispatch = useAppDispatch();
+    const citiesPool = useAppSelector(state => state.data.citiesPool);
+
     return (
-        <>
+        <div className='ac-container'>
             <Autocomplete
                 id="combo-box-demo"
                 dir='rtl'
                 value={null}
                 disablePortal
                 options={citiesPool}
-                getOptionLabel={c => c}
+                getOptionLabel={c => `${c.name}, ${c.country}`}
                 renderInput={(params) => {
                     return <TextField {...params} label="Please enter city" />
                 }}
@@ -27,8 +29,12 @@ const CityAutoComplete = () => {
                         dispatch(clearCitiesPool());
                     }
                 }}
+                onChange={(_e, v: BasicCityData | null) => {
+                    if (!v) return;
+                    dispatch(chooseCity(v));
+                }}
             />
-        </>
+        </div>
     )
 }
 

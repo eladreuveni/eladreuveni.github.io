@@ -6,6 +6,10 @@ import Favorites from './pages/Favorites';
 import Home from './pages/Home';
 
 import './App.scss';
+import { toast, ToastContainer } from 'react-toastify';
+import { useEffect } from 'react';
+import { useAppSelector } from './store/hooks';
+import 'react-toastify/dist/ReactToastify.css';
 
 const theme = createTheme({
   palette: {
@@ -21,6 +25,23 @@ const theme = createTheme({
 });
 
 function App() {
+  const error = useAppSelector(state => state.data.error);
+
+  // raise error toast on fetch error
+  useEffect(() => {
+    if (error) {
+      toast.error('Something went wrong :(', {
+        position: "bottom-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }, [error])
+
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
@@ -32,6 +53,17 @@ function App() {
           </Routes>
         </Router>
       </div>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </ThemeProvider>
   );
 }

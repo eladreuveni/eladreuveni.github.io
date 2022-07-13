@@ -1,14 +1,16 @@
+@import '../utils/vh.scss';
+
 .five-days-container {
     width: 90%;
-    height: 75vh;
     background-color: #f5f5f5;
-    margin: 5vh auto;
+    margin: auto;
 
     .top-line {
         padding: 1%;
         margin: auto;
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
         .top-left {
             display: flex;
             .name-temp {
@@ -19,11 +21,10 @@
                 .city-name {
                     font-weight: bold;
                 }
-                .temp {
-                }
             }
             .city-img {
-                height: 20vh;
+                height: vh(20);
+                max-width: 70%;
             }
         }
         .top-right {
@@ -40,6 +41,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    @media (max-width: 480px) {
+        .five-cards-container {
+            flex-direction: column;
+        }
     }
 }
 

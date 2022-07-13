@@ -1,8 +1,10 @@
+@import '../utils/vh.scss';
+
 .card-container {
-    width: 30vh;
-    height: 30vh;
+    width: vh(30);
+    height: vh(30);
     border: 1px solid black;
-    margin: 1vh;
+    margin: vh(1);
     border-radius: 10px;
 
     .react-card-front, .react-card-back, .react-card-flip, .react-card-flipper, .front, .back {

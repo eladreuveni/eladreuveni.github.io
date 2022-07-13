@@ -9,6 +9,12 @@ import './index.css';
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
+export const setVHVW = () => {
+  document.documentElement.style.setProperty('--vh', `${(document.documentElement.clientHeight) / 100}px`);
+  document.documentElement.style.setProperty('--vw', `${(document.documentElement.clientWidth) / 100}px`);
+}
+setVHVW(); // first
+
 root.render(
   // <React.StrictMode>
   <Provider store={store}>
